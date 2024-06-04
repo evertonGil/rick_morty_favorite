@@ -1,0 +1,65 @@
+nav {
+  display: flex;
+
+  @media (max-width: 600px) {
+    margin-top: 10px;
+  }
+
+  .btn {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    border: 1px solid #3d3d3d;
+    border-radius: 10px 0px 0px 10px;
+    background-color: rgba(255, 255, 255, 0);
+    transition: 200ms;
+    color: #a4a4a4;
+    margin: 0;
+    gap: 8px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .favorite-counter {
+      border-radius: 12px;
+      background-color: #ffffff;
+      border: 1px solid #3d3d3d;
+      color: #0a0a0a;
+      min-width: 15pt;
+      min-height: 15pt;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.btn-active {
+      background-color: rgba(255, 255, 255, 1);
+      color: #0a0a0a;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+      }
+
+      .favorite-counter {
+        background-color: transparent;
+      }
+    }
+
+    & ~ .btn {
+      border-radius: 0px;
+      
+      &:last-child {
+        border-radius: 0px 10px 10px 0px;
+        border-left: none;
+      }
+    }
+  }
+
+  a.btn {
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,21 @@
+<section class="search-bar">
+  <h2>Início</h2>
+  <form [formGroup]="form">
+    <app-text-field formControlName="search"></app-text-field>
+  </form>
+</section>
+<section class="character-grid">
+  @for (character of store.characters(); track character.id) {
+  <div class="character-card">
+    <img [src]="character.image" [alt]="character.name" />
+    <div class="character-info">
+      <h3>{{character.name}}</h3>
+      <p>{{character.species}}</p>
+    </div>
+  </div>
+  }
+</section>
+
+<section class="pagination-info">
+    showing {{store.characters().length}} of {{store.infoResponse().count}}
+</section>

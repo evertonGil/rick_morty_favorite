@@ -1,0 +1,14 @@
+<div
+  infinite-scroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="150"
+  (scrolled)="onScrollDown()"
+>
+  <header>
+    <img src="assets/images/rick-and-morty.png" alt="Rick and Morty" />
+    <app-main-nav></app-main-nav>
+  </header>
+  <main>
+    <router-outlet />
+  </main>
+</div>
