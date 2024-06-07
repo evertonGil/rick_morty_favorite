@@ -1,60 +1,48 @@
-import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject} from '@angular/core';
 import '@material/web/textfield/outlined-text-field.js';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {debounceTime, tap} from 'rxjs';
+import {Subject, debounceTime, takeUntil, tap} from 'rxjs';
 import {TextFieldComponent} from '../../components/text-field/text-field.component';
-import {CharacterModel, RickAndMortySearchInfoModel} from '../../services/rick-and-morty.model';
-import {RickAndMortyService, SearchCharactersParams} from '../../services/rick-and-morty.service';
-import {InfinityScrollService} from '../../services/infinity-scroll.service';
+import {RickAndMortyService} from '../../services/rick-and-morty/rick-and-morty.service';
+import {InfinityScrollService} from '../../services/infinity-scroll/infinity-scroll.service';
 import {CharacteresStore} from '../../stores/characteres.store';
+import {GridCardsComponent} from '../../components/grid-cards/grid-cards.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [TextFieldComponent, ReactiveFormsModule,],
-  providers: [RickAndMortyService, CharacteresStore],
+  imports: [TextFieldComponent, ReactiveFormsModule, GridCardsComponent],
+  providers: [RickAndMortyService],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   private readonly infityScrollService = inject(InfinityScrollService);
   private readonly fomBuilder = inject(FormBuilder);
-  // private readonly rickAnMortyService = inject(RickAndMortyService);
   readonly store = inject(CharacteresStore);
 
   form: FormGroup<{search: FormControl<string | null>}> = this.fomBuilder.group({
-    search: [''],
+    search: [this.store.query().searchText ?? ''],
   });
-  // characters = signal<CharacterModel[]>([]);
-  // searchInfo?: RickAndMortySearchInfoModel;
+  private readonly untilDestroy$ = new Subject<void>();
 
   public ngOnInit() {
     const query = this.store.query;
-    // this.searchCharacters({searchText: ''});
     this.onSearchChange();
     this.store.loadByQuery(query);
     this.onScrollDown();
   }
 
-  private searchCharacters(params: SearchCharactersParams) {
-    // this.rickAnMortyService
-    //   .searchCharacters(params)
-    //   .pipe(tap((result) => this.characters.set(result.results)))
-    //   .pipe(tap((result) => (this.searchInfo = result.info)))
-    //   .subscribe();
+  ngOnDestroy(): void {
+    this.untilDestroy$.next();
+    this.untilDestroy$.complete();
   }
 
   private onSearchChange() {
     this.form.controls.search.valueChanges
       .pipe(
+        takeUntil(this.untilDestroy$),
         debounceTime(500),
         tap((value) => this.store.updateSearchText(value ?? ''))
       )
@@ -64,13 +52,11 @@ export class SearchComponent implements OnInit {
   public onScrollDown() {
     this.infityScrollService.scroll
       .pipe(
+        takeUntil(this.untilDestroy$),
         tap(() => {
           this.store.updateNext();
         })
       )
       .subscribe();
-    // if (this.searchInfo?.next) {
-    //   this.searchCharacters({next: this.searchInfo?.next});
-    // }
   }
 }

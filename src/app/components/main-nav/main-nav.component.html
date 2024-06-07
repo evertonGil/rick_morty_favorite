@@ -1,16 +1,16 @@
 <nav>
   <a
     routerLink="/"
-    routerLinkActive="btn-active"
+    routerLinkActive="btn-primary"
     [routerLinkActiveOptions]="{ exact: true }"
     class="btn"
   >
     <fa-icon [icon]="faHome"></fa-icon>
     Inicio
   </a>
-  <a routerLink="favorite" routerLinkActive="btn-active" class="btn">
+  <a routerLink="favorite" routerLinkActive="btn-primary" class="btn">
     <fa-icon [icon]="faHeart"></fa-icon>
     Favoritos
-    <span class="favorite-counter">0</span>
+    <span class="favorite-counter">{{store.favoritesArray().length}}</span>
   </a>
 </nav>

@@ -1,1 +1,9 @@
-<p>favorite works!</p>
+<section class="search-bar">
+  <h2>Favorite</h2>
+</section>
+
+<app-grid-cards [characters]="store.favoritesArray()" [isLoading]="store.isLoading()">
+  <h3>Parece que você ainda não tem favoritos</h3>
+  <p>Volte à página inicial e escolha os melhores para você.</p>
+  <a type="button" class="btn btn-primary" routerLink="/">Voltar ao início</a>
+</app-grid-cards>
