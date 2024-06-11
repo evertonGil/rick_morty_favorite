@@ -5,12 +5,11 @@ import {faHeart} from '@fortawesome/free-regular-svg-icons';
 import {faHeart as faHeartSolid} from '@fortawesome/free-solid-svg-icons';
 import {CharacteresStore} from '../../stores/characteres.store';
 import {CommonModule} from '@angular/common';
-import {IsOnFavoritePipe} from '../../pipes/is-on-favorite.pipe';
 
 @Component({
   selector: 'app-character-card',
   standalone: true,
-  imports: [FontAwesomeModule, CommonModule, IsOnFavoritePipe],
+  imports: [FontAwesomeModule, CommonModule, ],
   templateUrl: './character-card.component.html',
   styleUrl: './character-card.component.scss',
 })
